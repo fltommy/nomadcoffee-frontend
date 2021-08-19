@@ -42,7 +42,7 @@ const LOGIN_MUTATION = gql`
 
 function Login() {
   const location = useLocation();
-  console.log(location);
+  //console.log(location);
 
   const {
     register,
@@ -103,7 +103,7 @@ function Login() {
                 message: "username should be longer than 5"
               }
             })}
-            onChange={clearLoginError}
+            onFocus={clearLoginError}
             name="username"
             type="text"
             placeholder="Username"
@@ -113,7 +113,7 @@ function Login() {
           <Input {...register("password", {
             required: "password required"
           })}
-            onChange={clearLoginError}
+            onFocus={clearLoginError}
             name="password"
             type="password"
             placeholder="Password"
