@@ -9,8 +9,9 @@ export const lightTheme = {
 };
 
 export const darkTheme = {
-  fontColor: "white",
+  fontColor: "gray",
   bgColor: "#000",
+  borderColor: "rgba(255, 255, 255, 0.5)",
 };
 
 export const GlobalStyles = createGlobalStyle`

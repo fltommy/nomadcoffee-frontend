@@ -26,18 +26,37 @@ const Subtitle = styled(FatLink)`
   margin-top: 10px;
 `;
 
+// const CREATE_ACCOUNT_MUTATION = gql`
+//   mutation createAccount(
+//     $name: String!
+//     $username: String!
+//     $email: String!
+//     $password: String!
+//   ) {
+//     createAccount(
+//       name: $name
+//       username: $username
+//       email: $email
+//       password: $password
+//     ) {
+//       ok
+//       error
+//     }
+//   }
+// `;
+
 const CREATE_ACCOUNT_MUTATION = gql`
   mutation createAccount(
-    $name: String!
     $username: String!
     $email: String!
     $password: String!
+    $name: String!    
   ) {
     createAccount(
-      name: $name
       username: $username
       email: $email
       password: $password
+      name: $name
     ) {
       ok
       error
@@ -47,13 +66,17 @@ const CREATE_ACCOUNT_MUTATION = gql`
 
 function SingUp() {
   const history = useHistory();
+
   const onCompleted = (data) => {
     const { username, password } = getValues();
+
+    console.log(data);
+
     const {
-      createAccount: { ok },
+      createAccount: { ok, error },
     } = data;
     if (!ok) {
-      return;
+      return setError("result", { message: error });
     }
     history.push(routes.home, {
       message: "Account created. Please log in.",
@@ -61,6 +84,7 @@ function SingUp() {
       password,
     });
   };
+
   const [createAccount, { loading }] = useMutation(CREATE_ACCOUNT_MUTATION, {
     onCompleted,
   });
@@ -69,20 +93,45 @@ function SingUp() {
     register,
     handleSubmit,
     getValues,
-    formState: { errors } } = useForm({
+    setError,
+    clearErrors,
+    formState } = useForm({
       mode: "onChange"
     });
 
+  // const onSubmitValid = (data) => {
+  //   console.log(data);
+  //   if (loading) {
+  //     return;
+  //   }
+  //   createAccount({
+  //     variables: {
+  //       ...data,
+  //     },
+  //   });
+  // };
+
   const onSubmitValid = (data) => {
+    console.log(data);
+
     if (loading) {
       return;
     }
+    const { username, email, password, name } = data;
     createAccount({
       variables: {
-        ...data,
+        username,
+        email,
+        password,
+        name,
       },
     });
   };
+
+  const clearLoginErorr = () => {
+    clearErrors("result");
+  };
+
   return (
     <AuthLayout>
       <PageTitle title="Sign up" />
@@ -95,26 +144,6 @@ function SingUp() {
         </HeaderContainer>
         <form onSubmit={handleSubmit(onSubmitValid)}>
           <Input
-            {...register("name", {
-              required: "Name is required.",
-            })}
-            name="name"
-            type="text"
-            placeholder="Name"
-            hasError={Boolean(errors?.name?.message)}
-          />
-          <FormError message={errors?.name?.message} />
-          <Input
-            {...register("email", {
-              required: "Email is required.",
-            })}
-            name="email"
-            type="text"
-            placeholder="Email"
-            hasError={Boolean(errors?.email?.message)}
-          />
-          <FormError message={errors?.email?.message} />
-          <Input
             {...register("username", {
               required: "Username is required.",
               minLength: {
@@ -125,9 +154,24 @@ function SingUp() {
             name="username"
             type="text"
             placeholder="username"
-            hasError={Boolean(errors?.username?.message)}
+            hasError={Boolean(formState.errors?.username?.message)}
+            onFocus={clearLoginErorr}
           />
-          <FormError message={errors?.username?.message} />
+          <FormError message={formState.errors?.username?.message} />
+
+          <Input
+            {...register("email", {
+              required: "Email is required.",
+            })}
+            name="email"
+            type="text"
+            placeholder="Email"
+            hasError={Boolean(formState.errors?.email?.message)}
+            onFocus={clearLoginErorr}
+          />
+          <FormError message={formState.errors?.email?.message} />
+
+
           <Input
             {...register("password", {
               required: "Password is required.",
@@ -139,14 +183,31 @@ function SingUp() {
             name="password"
             type="password"
             placeholder="Password"
-            hasError={Boolean(errors?.password?.message)}
+            hasError={Boolean(formState.errors?.password?.message)}
+            onFocus={clearLoginErorr}
           />
-          <FormError message={errors?.password?.message} />
+          <FormError message={formState.errors?.password?.message} />
+
+
+          <Input
+            {...register("name", {
+              required: "Name is required.",
+            })}
+            name="name"
+            type="text"
+            placeholder="Name"
+            hasError={Boolean(formState.errors?.name?.message)}
+            onFocus={clearLoginErorr}
+          />
+          <FormError message={formState.errors?.name?.message} />
+
+
           <Button
             type="submit"
             value={loading ? "Loading..." : "Sign up"}
-          // disabled={!formState.isValid || loading}
+            disabled={!formState.isValid || loading}
           />
+          <FormError message={formState.errors?.result?.message} />
         </form>
       </FormBox>
       <BottomBox cta="Have an account?" linkText="Log in" link={routes.home} />

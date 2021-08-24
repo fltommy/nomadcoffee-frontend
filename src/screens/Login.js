@@ -50,7 +50,7 @@ function Login() {
     getValues,
     setError,
     clearErrors,
-    formState: { errors } } = useForm({
+    formState } = useForm({
       mode: "onChange",
       defaultValues: {
         username: location?.state?.username || "",
@@ -74,6 +74,7 @@ function Login() {
   const [login, { loading }] = useMutation(LOGIN_MUTATION, {
     onCompleted,
   });
+
   const onSubmitValid = (data) => {
     if (loading) {
       return;
@@ -83,9 +84,11 @@ function Login() {
       variables: { username, password },
     });
   };
+
   const clearLoginError = () => {
     clearErrors("result");
   };
+
   return (
     <AuthLayout>
       <PageTitle title="Login" />
@@ -107,9 +110,10 @@ function Login() {
             name="username"
             type="text"
             placeholder="Username"
-            hasError={Boolean(errors?.username?.message)}
+            hasError={Boolean(formState.errors?.username?.message)}
           />
-          <FormError message={errors?.username?.message} />
+          <FormError message={formState.errors?.username?.message} />
+
           <Input {...register("password", {
             required: "password required"
           })}
@@ -117,15 +121,16 @@ function Login() {
             name="password"
             type="password"
             placeholder="Password"
-            hasError={Boolean(errors?.password?.message)}
+            hasError={Boolean(formState.errors?.password?.message)}
           />
-          <FormError message={errors?.password?.message} />
+          <FormError message={formState.errors?.password?.message} />
+
           <Button
             type="submit"
             value={loading ? "Loading..." : "Log in"}
-          // disabled={!formState.isValid || loading}
+            disabled={!formState.isValid || loading}
           />
-          <FormError message={errors?.result?.message} />
+          <FormError message={formState.errors?.result?.message} />
         </form>
         <Separator />
         <FacebookLogin>
