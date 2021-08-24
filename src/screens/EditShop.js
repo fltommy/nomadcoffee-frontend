@@ -5,14 +5,14 @@ import { useForm } from "react-hook-form";
 import { useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 import AuthLayout from "../components/auth/AuthLayout";
-import BottomBox from "../components/auth/BottomBox";
+// import BottomBox from "../components/auth/BottomBox";
 import Button from "../components/auth/Button";
 import FormBox from "../components/auth/FormBox";
 import FormError from "../components/auth/FormError";
 import Input from "../components/auth/Input";
 import PageTitle from "../components/PageTitle";
 import { FatLink } from "../components/shared";
-import routes from "../routes";
+// import routes from "../routes";
 
 const HeaderContainer = styled.div`
   display: flex;
@@ -85,7 +85,7 @@ function EditShop() {
   //  console.log(params.id);
 
   const onCompleted = (data) => {
-    const { name } = getValues();
+    // const { name } = getValues();
     //console.log(data);
 
     const {
@@ -109,7 +109,7 @@ function EditShop() {
   const {
     register,
     handleSubmit,
-    getValues,
+    // getValues,
     setError,
     clearErrors,
     formState } = useForm({

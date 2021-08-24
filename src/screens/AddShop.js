@@ -2,7 +2,7 @@ import { gql, useMutation } from "@apollo/client";
 import { faStore } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useForm } from "react-hook-form";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import AuthLayout from "../components/auth/AuthLayout";
 // import BottomBox from "../components/auth/BottomBox";
@@ -52,10 +52,10 @@ const CREATE_COFFEE_SHOP_MUTATION = gql`
 
 
 function AddShop() {
-  const history = useHistory();
+  // const history = useHistory();
 
   const onCompleted = (data) => {
-    const { name } = getValues();
+    // const { name } = getValues();
     console.log(data);
     const {
       createCoffeeShop: { ok, error },
@@ -78,7 +78,7 @@ function AddShop() {
   const {
     register,
     handleSubmit,
-    getValues,
+    // getValues,
     setError,
     clearErrors,
     formState } = useForm({

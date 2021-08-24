@@ -124,7 +124,8 @@ const SEE_COFFEE_SHOPS = gql`
 
 function Home() {
   // const { data } = useQuery(SEE_COFFEE_SHOPS);
-  const [lastId, setLastId] = useState(0);
+  // const [lastId, setLastId] = useState(0);
+  const [lastId] = useState(0);
   const { data } = useQuery(SEE_COFFEE_SHOPS, {
     variables: {
       lastId,
